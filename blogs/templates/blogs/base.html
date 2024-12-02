@@ -77,9 +77,11 @@
 
       <ul class="navbar-nav ml-auto mb-2 mb-md-0">
         {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>
-          </li>
+          <form action="{% url 'users:logout' %}" method='post' class="d-flex align-items-center">
+            {% csrf_token %}
+            <button name='submit' class='btn btn-outline-light btn-sm'>
+              Log out</button>
+          </form>
         {% else %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'users:register' %}">Register</a>

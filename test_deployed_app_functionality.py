@@ -307,14 +307,20 @@ except AssertionError:
     with open('error_page.html', 'w') as f:
         f.write(r.text)
     raise AssertionError
-
+    
 
 # --- Test logout page ---
 # Log out, then test anonymous views of the data that was just created.
-
 print("  Checking that the logout process works...")
-url = f"{app_url}users/logout/"
-r = s.get(url)
+
+csrftoken = s.cookies["csrftoken"]
+post_data = {
+    "csrfmiddlewaretoken": csrftoken,
+}
+headers = {"referer": f"{app_url}users/logout"}
+
+logout_url = f"{app_url}users/logout/"
+r = s.post(logout_url, data=post_data, headers=headers)
 
 assert r.status_code == 200
 assert "Logged out" in r.text
