@@ -307,7 +307,7 @@ except AssertionError:
     with open('error_page.html', 'w') as f:
         f.write(r.text)
     raise AssertionError
-    
+
 
 # --- Test logout page ---
 # Log out, then test anonymous views of the data that was just created.
@@ -382,14 +382,16 @@ assert '<label class="form-label" for="id_username">Username</label>' in r.text
 
 
 # --- Test that DEBUG is set to False correctly. ---
-print("  Checking that DEBUG is set to False correctly. ---")
-url = f"{app_url}nonexistent_page/"
-r = requests.get(url)
+# This only applies to deployed projects.
+if "localhost" not in app_url:
+    print("  Checking that DEBUG is set to False correctly. ---")
+    url = f"{app_url}nonexistent_page/"
+    r = requests.get(url)
 
-assert r.status_code == 404
-assert "Not Found" in r.text
-assert "The requested resource was not found on this server." in r.text
-assert "You're seeing this error because you have DEBUG = True in your Django settings file." not in r.text
+    assert r.status_code == 404
+    assert "Not Found" in r.text
+    assert "The requested resource was not found on this server." in r.text
+    assert "You're seeing this error because you have DEBUG = True in your Django settings file." not in r.text
 
 
 # --- Everything works! (if you made it to here) --
